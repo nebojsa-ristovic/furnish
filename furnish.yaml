@@ -1,0 +1,54 @@
+---
+version: 0.1
+
+global:
+  package-managers:
+    - name: "brew"
+      default: true
+
+mandatory-packages:
+  ssh:
+    enabled: true
+  xcode-select:
+    enabled: true
+  packages:
+    - name: 'cmatrix'
+      applier: install
+      optional: true
+      dependencies:
+        - 'xcode-select'
+  shell:
+    - name: 'ls | fd'
+      cmd: 'ls -lah | fd .yaml'
+      silent: true
+    - name: 'test script'
+      file: 'scripts/test.sh'
+      silent: true
+    - name: 'silent test script'
+      file: 'scripts/test.sh'
+      silent: true
+
+mandatory-packages-fail:
+  xcode-select:
+    enabled: true
+  packages:
+    - name: 'cmatrix'
+      applier: delete
+      dependencies:
+        - 'xcode-select'
+    - name: 'nvim'
+      applier: update
+      dependencies:
+        - 'xcode-select'
+        #- 'test_overhere'
+    - name: 'something_else'
+      dependencies:
+        - 'xcode-select'
+        #- 'test_overhere'
+    - name: 'another_non_existing'
+  dependencies:
+    - 'mandatory-packages'
+
+empty-stage-test:
+  dependencies:
+    - 'mandatory-packages-fail'
